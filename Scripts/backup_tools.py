@@ -4,9 +4,22 @@ from datetime import timezone
 from pathlib import Path 
 import secrets
 import json
+import tomllib
 
 
-BASE_PATH_FOR_BACKUP = Path('C:/Backups')
+CONFIG_FILE = Path(__file__).parent / 'config.toml'
+
+def load_config():
+    if not  CONFIG_FILE.exists():
+        raise SystemExit('config.toml not found. Copy config.example.toml to or edit it.')
+    
+    with open(CONFIG_FILE, 'rb') as f:
+        return tomllib.load(f)   
+CONFIG = load_config()
+
+
+
+BASE_PATH_FOR_BACKUP = Path(CONFIG['BASE_PATH'])
 LOGS_FOR_BACKUPS = BASE_PATH_FOR_BACKUP / 'Logs' / 'logs_for_backups.txt'
 LOGS_FOR_ERRORS = BASE_PATH_FOR_BACKUP / 'Logs' / 'logs_for_errors.jsonl' 
 TIMEING_FOR_LOGS = dt.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -78,7 +91,7 @@ def change_check(source, target):
     except Exception as e:
         write_logs(e, 'backup_tools/change_check', '')
 
-        
+
 
 
 def copy_files(paths):
