@@ -1,0 +1,15 @@
+BASE_PATH = 'C:/Backups'
+
+[[source]]
+
+name = 'study'
+path = 'C:\Users\Stady'
+
+[[source]]
+
+name = 'startups'
+path = 'C:\Users\StartUps'
+
+[ESD]
+
+safety_margin_gb = 1
