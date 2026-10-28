@@ -7,7 +7,7 @@ import json
 import tomllib
 
 
-CONFIG_FILE = Path(__file__).parent / 'config.toml'
+CONFIG_FILE = Path(__file__).parent.parent / 'config.toml'
 
 def load_config():
     if not  CONFIG_FILE.exists():
@@ -59,7 +59,7 @@ def write_logs(e, file_name: str, message):
         }
 
         with open(LOGS_FOR_ERRORS, 'a', encoding='utf-8') as f:
-            json.dump(f, data, ensure_ascii=False, indent=4)
+            json.dump(data, f,  ensure_ascii=False, indent=4)
 
         return print(f'{message} for {file_name}')    
 
@@ -100,25 +100,24 @@ def copy_files(paths):
 
     copied = 0
 
-    try:
+  
 
-        for file, new_file in paths:
+    for file, new_file in paths:
 
-            try:
-                new_file.parent.mkdir(parents=True, exits_ok=True)
-                sh.copy2(file, new_file)
-                copied += 1
-                write_logs(0,str(file), f' After all change -{file}- copied to -{new_file}- . ')
+        try:
+            new_file.parent.mkdir(parents=True, exist_ok=True)
+            sh.copy2(file, new_file)
+            copied += 1
+            write_logs(0,str(file), f' After all change -{file}- copied to -{new_file}- . ')
 
-            except Exception as e:
-                write_logs(e, file, 0 )
+        except Exception as e:
+            write_logs(e, file, 0 )
 
-        return copied        
+    return copied        
 
-    except Exception as e:
-        write_logs(e, 'backup_tools/copy_files', '')
+    
                 
-
+ 
 
 
 
